@@ -8,3 +8,8 @@ def imprimir_tabuleiro(tabuleiro):
         if i < 3:
             print("  ———┼—————┼———")
 
+
+def novo_tabuleiro():
+    return [[" ", " ", " "],
+                 [" ", " ", " "],
+                 [" ", " ", " "]]

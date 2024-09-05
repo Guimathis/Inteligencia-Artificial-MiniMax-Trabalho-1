@@ -18,5 +18,6 @@ def ler_entrada(dado):
 def ler_jogada(jogador):
     jogada = {'linha': None, 'coluna': None}
     entrada = input(f"\nJogador {jogador}, faça sua jogada (formato: x y): ")
+    if len(entrada) == 0: return None
     jogada['linha'], jogada['coluna'] = int(entrada.split()[0])-1, int(entrada.split()[1])-1
     return jogada
