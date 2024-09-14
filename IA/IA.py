@@ -1,19 +1,48 @@
-from copy import deepcopy
+# lib usada para calcular o valor do tabuleiro na heuristica
 import math
+
+# lib usada para gerar numeros aletórios
+import random
+
 from jogo.regras_jogo import *
+from jogo.tabuleiro import jogadas_possiveis, simular_jogada
 
 
-def IA(tableiro, jogador):
-    return melhor_jogada(tableiro, jogador)
+# Verifica em todas as posições, se uma jogada irá gerar um vencedor iminente
+# Se sim retorna true, se não False
+def verificar_vitoria_iminente(tabuleiro, jogador):
+    # Compara se existem 3 posições seguidas com a figura do jogador
+    def vitoria_iminente(l1, l2, l3, j):
+        return (l1 == j and l2 == j and l3 == j) or \
+            (l1 == j and l3 == j and l2 == j) or \
+            (l2 == j and l3 == j and l1 == j)
 
+    # Linhas/colunas
+    for i in range(3):
+        if vitoria_iminente(tabuleiro[i][0], tabuleiro[i][1], tabuleiro[i][2], jogador):
+            return True
+        if vitoria_iminente(tabuleiro[0][i], tabuleiro[1][i], tabuleiro[2][i], jogador):
+            return True
+
+    # Diagonais
+    if vitoria_iminente(tabuleiro[0][0], tabuleiro[1][1], tabuleiro[2][2], jogador):
+        return True
+    if vitoria_iminente(tabuleiro[0][2], tabuleiro[1][1], tabuleiro[2][0], jogador):
+        return True
+
+
+# Função heuristica que estima o valor do tabuleiro num nó folha
+# Utiliza os valores 0 ou 1 gerados pelas comparações para estimar um valor para a linha/coluna/diagonal
+# incrementa h para dar mais valor e decrementa para diminuir o valor do tabuleiro
+# quanto mais figuras iguais na mesma linha maior é o valor incrementado ou decrementado
 def heuristica(tabuleiro, jogador):
-    # Estima valor do tabuleiro
     h = 0
     oponente = 'O' if jogador == 'X' else 'X'
 
     # Verifica as linhas
     for i in range(3):
         if oponente not in (tabuleiro[i][0], tabuleiro[i][1], tabuleiro[i][2]):
+            #  Soma a quantidade de figuras iguais na mesma linha e eleva ao quadrado
             h += math.pow((tabuleiro[i][0] == jogador) + (tabuleiro[i][1] == jogador) + (tabuleiro[i][2] == jogador), 2)
 
     # Verifica as colunas
@@ -43,107 +72,95 @@ def heuristica(tabuleiro, jogador):
 
     if jogador not in (tabuleiro[0][2], tabuleiro[1][1], tabuleiro[2][0]):
         h -= math.pow((tabuleiro[0][2] == oponente) + (tabuleiro[1][1] == oponente) + (tabuleiro[2][0] == oponente), 2)
-
     return h
-# def heuristica(tabuleiro, jogador):
-#     # Verifica linhas, colunas e diagonais para vitória
-#     for linha in tabuleiro:
-#         if linha[0] == linha[1] == linha[2]:
-#             if linha[0] == 'X':
-#                 return 10
-#             elif linha[0] == 'O':
-#                 return -10
-#
-#     for col in range(3):
-#         if tabuleiro[0][col] == tabuleiro[1][col] == tabuleiro[2][col]:
-#             if tabuleiro[0][col] == 'X':
-#                 return 10
-#             elif tabuleiro[0][col] == 'O':
-#                 return -10
-#
-#     if tabuleiro[0][0] == tabuleiro[1][1] == tabuleiro[2][2]:
-#         if tabuleiro[0][0] == 'X':
-#             return 10
-#         elif tabuleiro[0][0] == 'O':
-#             return -10
-#
-#     if tabuleiro[0][2] == tabuleiro[1][1] == tabuleiro[2][0]:
-#         if tabuleiro[0][2] == 'X':
-#             return 10
-#         elif tabuleiro[0][2] == 'O':
-#             return -10
-#
-#     # Verifica se há dois em linha e o terceiro espaço vazio
-#     for linha in tabuleiro:
-#         if linha.count('X') == 2 and linha.count(' ') == 1:
-#             return 5  # Bom para X
-#         elif linha.count('O') == 2 and linha.count(' ') == 1:
-#             return -5  # Bom para O
-#
-#     for col in range(3):
-#         coluna = [tabuleiro[0][col], tabuleiro[1][col], tabuleiro[2][col]]
-#         if coluna.count('X') == 2 and coluna.count(' ') == 1:
-#             return 5  # Bom para X
-#         elif coluna.count('O') == 2 and coluna.count(' ') == 1:
-#             return -5  # Bom para O
-#
-#     # Nenhum resultado final, jogo em andamento ou empate
-#     return 0
 
 
-def mini_max(tabuleiro, profundidade, alpha, beta, jogador):
-    if profundidade == 0 or verificar_vitoria(tabuleiro, jogador):
-        return heuristica(tabuleiro, jogador)
-    if verificar_empate(tabuleiro):
-        return 0
+# Algoritmo Minimax, que escolhe recursivamente qual jogada será executada
+def minimax(tabuleiro, eh_max, alfa, beta):
+    vencedor = verificar_vitoria(tabuleiro)
+
+    # Condições de parada da recursão, retornam o valor do tabuleiro
+    if vencedor == 'O': return heuristica(tabuleiro, 'O')
+    if vencedor == 'X': return heuristica(tabuleiro, 'x')
+    if verificar_empate(tabuleiro): return 0
 
     jogadas = jogadas_possiveis(tabuleiro)
-    if jogador == 'O':  # MAX
-        valorMax = -999
+
+    if eh_max:  # MAX, busca o valor máximo
+        maior_valor = float('-inf')
         for jogada in jogadas:
-            resultado = proxima_jogada(tabuleiro, jogada, jogador)
-            valor = mini_max(resultado, profundidade-1, alpha, beta, jogador='O' if jogador == 'X' else 'X')
-            valorMax = max(valorMax, valor)
-            alpha = max(alpha, valor)
-            if beta <= alpha:
+            tabuleiro[jogada[0]][jogada[1]] = 'O'
+            valor = minimax(tabuleiro, False, alfa, beta)
+            tabuleiro[jogada[0]][jogada[1]] = ' '
+            if valor > maior_valor:
+                maior_valor = valor
+
+            # Realiza a poda alfabeta
+            alfa = max(alfa, valor)
+            if beta <= alfa:
                 break
-        return valorMax
-    else:  # MIN
-        valorMin = 999
+        return maior_valor
+
+    else:  # MIN, busca o valor mínimo
+        menor_valor = float('inf')
         for jogada in jogadas:
-            resultado = proxima_jogada(tabuleiro, jogada, jogador)
-            valor = mini_max(resultado, profundidade-1, alpha, beta, jogador='O' if jogador == 'X' else 'X')
-            valorMin = min(valorMin, valor)
+            tabuleiro[jogada[0]][jogada[1]] = 'X'
+            valor = minimax(tabuleiro, True, alfa, beta)
+            tabuleiro[jogada[0]][jogada[1]] = ' '
+            if valor < menor_valor:  # Mantém o menor valor
+                menor_valor = valor
+
+            # Realiza a poda alfabeta
             beta = min(beta, valor)
-            if beta <= alpha:
+            if beta <= alfa:
                 break
-        return valorMin
+        return menor_valor
 
 
-# Retorna uma lista com os indices de todas as jogadas possiveis
-def jogadas_possiveis(tabuleiro):
-    jogadas = []
-    for i, linha in enumerate(tabuleiro):
-        for j, posicao in enumerate(linha):
-            if posicao == ' ':
-                jogadas.append([i, j])
-    return jogadas
-
-
-def melhor_jogada(tabuleiro, jogador):
+# Função que processa as possibilidades de jogadas e escolhe a de maior valor para a IA(MAX)
+# Executa abordagens diferentes dependendo da dificuldade selecionada
+def melhor_jogadaIA(tabuleiro, dificuldade):
+    melhor_jogada = None
+    valor = 0
+    maior_valor = -999
     jogadas = jogadas_possiveis(tabuleiro)
-    melhor = -999
-    melhor_j = None
+
+
     for jogada in jogadas:
-        resultado = proxima_jogada(tabuleiro, jogada, jogador)
-        valor = mini_max(resultado, 1, 0, 0, jogador='O' if jogador == 'X' else 'X')
-        if valor > melhor:
-            melhor = valor
-            melhor_j = jogada
-    return melhor_j
+        tabuleiro[jogada[0]][jogada[1]] = 'O'
+
+        # Se estiver no fácil retorna uma jogada aleatória
+        if dificuldade == 1:
+            melhor_jogada = jogada_aleatória(tabuleiro)
+
+        # Se estiver no médio, chance de 50% de jogar aleatório ou chamar o Minimax
+        rng = random.randrange(0, 2)
+        if dificuldade == 2 and rng == 0:
+            valor = minimax(tabuleiro, False, float('-inf'), float('inf'))
+        elif dificuldade == 2:
+            melhor_jogada = jogada_aleatória(tabuleiro)
+
+        # Se estiver no difícil usa o minimax para escolher a jogada
+        if dificuldade == 3:
+            valor = minimax(tabuleiro, False, float('-inf'), float('inf'))
+        tabuleiro[jogada[0]][jogada[1]] = ' '
+
+        # Se o valor da última jogada for o maior, escolhe-a como melhor jogada
+        if valor > maior_valor:
+            maior_valor = valor
+            melhor_jogada = jogada
+
+        # Se duas jogadas tiverem o mesmo valor, verifica e escolhe a que gera uma vitória para a IA
+        elif valor == maior_valor:
+            copia_tabuleiro = simular_jogada(tabuleiro, jogada)
+            if verificar_vitoria_iminente(copia_tabuleiro, 'O'):
+                melhor_jogada = jogada
+
+    # print(f'IA escolheu marcar O na posição {melhor_jogada} com um valor de: {maior_valor}')
+    return melhor_jogada  # (i, j)
 
 
-def proxima_jogada(tabuleiro, posicao, jogador):
-    tabuleiro_novo = deepcopy(tabuleiro)
-    tabuleiro_novo[posicao[0]][posicao[1]] = jogador
-    return tabuleiro_novo
+# Retorna uma jogada aleaória dentre as possiveis
+def jogada_aleatória(tabuleiro):
+    jogadas = jogadas_possiveis(tabuleiro)
+    return jogadas[random.randrange(0, len(jogadas))]

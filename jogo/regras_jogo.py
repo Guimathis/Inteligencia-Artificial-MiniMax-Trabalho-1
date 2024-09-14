@@ -3,29 +3,37 @@
 
 
 # Verifica se há um vencedor.
-def verificar_vitoria(tabuleiro, jogador):
-    # Verifica linhas, se todas as posições da linha são iguais retorna true(vitória do jogador atual)
-    for linha in tabuleiro:
-        if all([posicao == jogador for posicao in linha]):
-            return True
+# Se existir retorna a figura do vencedor
+# se não existir retorna nulo
+def verificar_vitoria(board):
+    # Verifica as linhas
+    for i in range(3):
+        if board[i][0] == board[i][1] == board[i][2] and board[i][0] != ' ':
+            return board[i][0]
 
-    # Verifica as colunas, se todas as posições da coluna são iguais retorna true(vitória do jogador atual)
-    for coluna in range(3):
-        if all([tabuleiro[linha][coluna] == jogador for linha in range(3)]):
-            return True
+    # Verifica as colunas
+    for i in range(3):
+        if board[0][i] == board[1][i] == board[2][i] and board[0][i] != ' ':
+            return board[0][i]
 
-    # Verifica as diagonais
-    if tabuleiro[0][0] == tabuleiro[1][1] == tabuleiro[2][2] == jogador:
-        return True
-    if tabuleiro[0][2] == tabuleiro[1][1] == tabuleiro[2][0] == jogador:
-        return True
+    # Verifica a diagonal principal
+    if board[0][0] == board[1][1] == board[2][2] and board[0][0] != ' ':
+        return board[0][0]
 
-    # Não há vencedor
-    return False
+    # Verifica a diagonal secundária
+    if board[0][2] == board[1][1] == board[2][0] and board[0][2] != ' ':
+        return board[0][2]
+
+    # Se não houver vencedor, retorna None
+    return None
 
 
 # Verifica se houve empate
 # Percorre todas as posições do tabuleiro e verifica se estão vazias
 # Se nenhuma posição estiver vazia temos um empate
 def verificar_empate(tabuleiro):
-    return all([posicao != " " for linha in tabuleiro for posicao in linha])
+    for linha in tabuleiro:
+        for coluna in linha:
+            if coluna == ' ':
+                return False
+    return True
