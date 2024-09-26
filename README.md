@@ -6,16 +6,25 @@ Este repositório contém uma implementação do clássico jogo da velha (tic-ta
 - **Interface textual**:
   -  Menu de opções e estados de jogo feitos com interface textual, com instruções para jogar.
   
+
 - **Interface Gráfica**:
     - Possibilidade de escolher as jogadas e controlar opções através de uma interface gráfica simples.
+    - **Botões**:
+      - **Dificuldade**: Alterna entre as dificuldades
+      - **Reinicio**: Reinicia o jogo com um novo tabuleiro, salvando as outras opções.
+      - **Modo de jogo**: Alterna entre modo de jogo PvIA e PvP.
+      
+
 - **Modos de jogo**:
   - **PvP (Player vs Player)**: Dois jogadores humanos se enfrentam.
   - **PvIA (Player vs IA)**: O jogador humano enfrenta a IA, com três níveis de dificuldade.
   
+
 - **Níveis de dificuldade**:
   - **Fácil**: Todas as jogadas da IA são aleatórias.
   - **Médio**: 33.33% das jogadas da IA são aleatórias e 66.66% utilizam o algoritmo Minimax com poda Alfa-Beta.
   - **Difícil**: Todas as jogadas da IA utilizam o algoritmo Minimax com poda Alfa-Beta, sem aleatoriedade.
+
 
 - **IA com Minimax**: A IA utiliza o algoritmo Minimax para garantir os melhores movimentos.
 - **Poda Alfa-Beta**: Otimização do Minimax, reduzindo a quantidade de nós analisados para aumentar a eficiência.
