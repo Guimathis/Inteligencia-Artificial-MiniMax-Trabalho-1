@@ -2,6 +2,7 @@ from pygame import *
 
 from IA.IA import *
 from Interface.GUI.constantes import *
+from Interface.TEXTUAL.main import jogada_IA
 from jogo.jogador import trocar_jogador
 from jogo.tabuleiro import novo_tabuleiro
 
@@ -12,6 +13,7 @@ pygame.font.init()
 altura_janela = 600
 largura_janela = 700
 janela = display.set_mode((altura_janela, largura_janela))
+pygame.display.set_caption('Jogo da Velha IA')
 
 
 # Desenha o tabuleiro
@@ -203,8 +205,8 @@ def mainGUI(tabuleiro, dificuldade, jogador_atual='X', modo_de_jogo='P x IA'):
             if modo_de_jogo == 'P x IA':
                 # Jogada da IA se for a vez do jogador 'O'
                 if jogando and jogador_atual == 'O' and jogadas_possiveis(tabuleiro):
-                    jogadaIA = melhor_jogadaIA(tabuleiro, dificuldade)  # Escolhe a melhor jogada
-                    tabuleiro[jogadaIA[0]][jogadaIA[1]] = jogador_atual
+
+                    jogada_IA(tabuleiro, dificuldade, jogador_atual)  # Executa a jogada da IA com base na dificuldade
                     desenhar_tabuleiro(tabuleiro)
                     if fim_de_jogo(tabuleiro):
                         jogando = False

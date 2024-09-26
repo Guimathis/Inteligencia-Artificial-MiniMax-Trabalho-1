@@ -129,20 +129,7 @@ def melhor_jogadaIA(tabuleiro, dificuldade):
     for jogada in jogadas:
         tabuleiro[jogada[0]][jogada[1]] = 'O'  # simula a jogada
 
-        # Jogada aleatória
-        if dificuldade == 1:
-            melhor_jogada = jogada_aleatória(tabuleiro)
-
-        # Se estiver no médio, chance de 66.66% para chamar o Minimax
-        rng = random.randrange(0, 3)
-        if dificuldade == 2 and rng in (0, 1):
-            valor = minimax(tabuleiro, False, float('-inf'), float('inf'))
-        elif dificuldade == 2:  # 33.33% de chance de jogar aleatóriamente
-            melhor_jogada = jogada_aleatória(tabuleiro)
-
-        # Se estiver no difícil usa sempre o minimax para escolher a jogada
-        if dificuldade == 3:
-            valor = minimax(tabuleiro, False, float('-inf'), float('inf'))
+        valor = minimax(tabuleiro, False, float('-inf'), float('inf'))
 
         tabuleiro[jogada[0]][jogada[1]] = ' '  # Desfaz a jogada simulada
 

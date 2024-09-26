@@ -74,7 +74,7 @@ def jogador_vs_IA(tabuleiro, jogador_atual, dificuldades, dificuldade):
             print("Empate!")
             break
         try:
-            if jogador_atual == 'X':
+            if jogador_atual == 'X':  # Executa a jogada do jogador
                 jogada = ler_jogada(jogador_atual)
                 if jogada is None:
                     print('\nPartida encerrada, voltando ao menu:\n')
@@ -83,15 +83,30 @@ def jogador_vs_IA(tabuleiro, jogador_atual, dificuldades, dificuldade):
                     print("Posição já ocupada! Tente novamente.")
                     continue
                 tabuleiro[jogada['linha']][jogada['coluna']] = jogador_atual
-            else:
-                jogadaIA = melhor_jogadaIA(tabuleiro, dificuldade)
-                tabuleiro[jogadaIA[0]][jogadaIA[1]] = jogador_atual
-
+            else:  # Executa a jogada da IA com base na dificuldade
+                jogada_IA(tabuleiro, dificuldade, jogador_atual)
         except (ValueError, IndexError, TypeError):  # Tratamento de exceções para evitar encerramentos inesperados
             print("Entrada inválida, insira uma posição valida:")
             continue
         jogador_atual = trocar_jogador(jogador_atual)  # Altera o jogador para a proxima iteração
 
+
+def jogada_IA(tabuleiro, dificuldade, jogador_atual):
+    # Jogada aleatória
+    if dificuldade == 1:
+        jogadaIA = jogada_aleatória(tabuleiro)
+        tabuleiro[jogadaIA[0]][jogadaIA[1]] = jogador_atual
+        print('A IA jogou aleatóriamente na posição: (', jogadaIA[0] + 1, ',', jogadaIA[1] + 1, ')')
+
+    # Se estiver no médio, chance de 50% para jogar aleatóriamente
+    rng = random.randrange(0, 2)
+    if dificuldade == 2 and rng == 0:
+        jogadaIA = jogada_aleatória(tabuleiro)
+        tabuleiro[jogadaIA[0]][jogadaIA[1]] = jogador_atual
+        print('\nA IA jogou aleatóriamente na posição: (', jogadaIA[0] + 1, ',', jogadaIA[1] + 1, ')')
+    elif dificuldade == 3 or (dificuldade == 2 and rng == 1):
+        jogadaIA = melhor_jogadaIA(tabuleiro, dificuldade)
+        tabuleiro[jogadaIA[0]][jogadaIA[1]] = jogador_atual
 
 if __name__ == '__main__':
     loop_opções_execução()  # Inicia o jogo

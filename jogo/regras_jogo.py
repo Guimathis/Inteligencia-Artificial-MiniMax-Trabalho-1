@@ -34,3 +34,4 @@ def verificar_empate(tabuleiro):
             if coluna == ' ':
                 return False
     return True
+
