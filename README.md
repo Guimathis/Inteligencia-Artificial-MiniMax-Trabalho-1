@@ -6,13 +6,15 @@ Este repositório contém uma implementação do clássico jogo da velha (tic-ta
 - **Interface textual**:
   -  Menu de opções e estados de jogo feitos com interface textual, com instruções para jogar.
   
+- **Interface Gráfica**:
+    - Possibilidade de escolher as jogadas e controlar opções através de uma interface gráfica simples.
 - **Modos de jogo**:
   - **PvP (Player vs Player)**: Dois jogadores humanos se enfrentam.
   - **PvIA (Player vs IA)**: O jogador humano enfrenta a IA, com três níveis de dificuldade.
   
 - **Níveis de dificuldade**:
   - **Fácil**: Todas as jogadas da IA são aleatórias.
-  - **Médio**: 50% das jogadas da IA são aleatórias e 50% utilizam o algoritmo Minimax com poda Alfa-Beta.
+  - **Médio**: 33.33% das jogadas da IA são aleatórias e 66.66% utilizam o algoritmo Minimax com poda Alfa-Beta.
   - **Difícil**: Todas as jogadas da IA utilizam o algoritmo Minimax com poda Alfa-Beta, sem aleatoriedade.
 
 - **IA com Minimax**: A IA utiliza o algoritmo Minimax para garantir os melhores movimentos.
@@ -21,7 +23,7 @@ Este repositório contém uma implementação do clássico jogo da velha (tic-ta
 
 ## Requisitos
 
-- Biblioteca math, random e deepcopy
+- Biblioteca math, random, deepcopy e pygame
 
 ## Como Executar
 

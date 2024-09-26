@@ -32,3 +32,7 @@ def ler_dificuldade(dificuldade_anterior):
         return dificuldade_anterior
     print('\n')
     return int(index_dificuldade)
+
+
+def trocar_jogador(ultimo_jogador):
+    return "O" if ultimo_jogador == "X" else "X"

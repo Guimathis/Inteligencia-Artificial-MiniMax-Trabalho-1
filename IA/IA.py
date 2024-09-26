@@ -1,6 +1,5 @@
 # lib usada para calcular o valor do tabuleiro na heuristica
 import math
-
 # lib usada para gerar numeros aletórios
 import random
 
@@ -61,11 +60,13 @@ def heuristica(tabuleiro, jogador):
     # Subtrai os valores para o oponente
     for i in range(3):
         if jogador not in (tabuleiro[i][0], tabuleiro[i][1], tabuleiro[i][2]):
-            h -= math.pow((tabuleiro[i][0] == oponente) + (tabuleiro[i][1] == oponente) + (tabuleiro[i][2] == oponente), 2)
+            h -= math.pow((tabuleiro[i][0] == oponente) + (tabuleiro[i][1] == oponente) + (tabuleiro[i][2] == oponente),
+                          2)
 
     for i in range(3):
         if jogador not in (tabuleiro[0][i], tabuleiro[1][i], tabuleiro[2][i]):
-            h -= math.pow((tabuleiro[0][i] == oponente) + (tabuleiro[1][i] == oponente) + (tabuleiro[2][i] == oponente), 2)
+            h -= math.pow((tabuleiro[0][i] == oponente) + (tabuleiro[1][i] == oponente) + (tabuleiro[2][i] == oponente),
+                          2)
 
     if jogador not in (tabuleiro[0][0], tabuleiro[1][1], tabuleiro[2][2]):
         h -= math.pow((tabuleiro[0][0] == oponente) + (tabuleiro[1][1] == oponente) + (tabuleiro[2][2] == oponente), 2)
@@ -124,26 +125,26 @@ def melhor_jogadaIA(tabuleiro, dificuldade):
     valor = 0
     maior_valor = -999
     jogadas = jogadas_possiveis(tabuleiro)
-
-
+    print('Jogadas possiveis para IA: \n', jogadas)
     for jogada in jogadas:
-        tabuleiro[jogada[0]][jogada[1]] = 'O'
+        tabuleiro[jogada[0]][jogada[1]] = 'O'  # simula a jogada
 
-        # Se estiver no fácil retorna uma jogada aleatória
+        # Jogada aleatória
         if dificuldade == 1:
             melhor_jogada = jogada_aleatória(tabuleiro)
 
-        # Se estiver no médio, chance de 50% de jogar aleatório ou chamar o Minimax
-        rng = random.randrange(0, 2)
-        if dificuldade == 2 and rng == 0:
+        # Se estiver no médio, chance de 66.66% para chamar o Minimax
+        rng = random.randrange(0, 3)
+        if dificuldade == 2 and rng in (0, 1):
             valor = minimax(tabuleiro, False, float('-inf'), float('inf'))
-        elif dificuldade == 2:
+        elif dificuldade == 2:  # 33.33% de chance de jogar aleatóriamente
             melhor_jogada = jogada_aleatória(tabuleiro)
 
-        # Se estiver no difícil usa o minimax para escolher a jogada
+        # Se estiver no difícil usa sempre o minimax para escolher a jogada
         if dificuldade == 3:
             valor = minimax(tabuleiro, False, float('-inf'), float('inf'))
-        tabuleiro[jogada[0]][jogada[1]] = ' '
+
+        tabuleiro[jogada[0]][jogada[1]] = ' '  # Desfaz a jogada simulada
 
         # Se o valor da última jogada for o maior, escolhe-a como melhor jogada
         if valor > maior_valor:
@@ -156,7 +157,9 @@ def melhor_jogadaIA(tabuleiro, dificuldade):
             if verificar_vitoria_iminente(copia_tabuleiro, 'O'):
                 melhor_jogada = jogada
 
-    # print(f'IA escolheu marcar O na posição {melhor_jogada} com um valor de: {maior_valor}')
+        print('Valor da jogada ' + jogada.__str__() + ': ' + valor.__str__())
+
+    print(f'IA escolheu marcar O na posição {melhor_jogada} com um valor de: {maior_valor}\n\n')
     return melhor_jogada  # (i, j)
 
 
