@@ -85,21 +85,21 @@ def verificar_vitoria_gui(tabuleiro, mostrar_gui):
 
 # Função para desenhar um botão
 def desenhar_botao(texto, cor, x, y, largura, altura):
-    # Desenhe o retângulo do botão
+    # Desenha o retângulo do botão
     botao_rect = pygame.Rect(x, y, largura, altura)
     pygame.draw.rect(janela, cor, botao_rect)
 
-    # Renderize o texto
+    # Renderiza o texto
     texto_renderizado = FONTE.render(texto, True, COR_TEXTO)
 
-    # Centralize o texto no botão
+    # Centraliza o texto no botão
     texto_rect = texto_renderizado.get_rect(center=botao_rect.center)
     janela.blit(texto_renderizado, texto_rect)
 
-    return botao_rect  # Retorne o retângulo do botão para verificar cliques
+    return botao_rect  # Retorna o retângulo do botão para verificar cliques
 
 
-# Verifica se o jogo chegou a um estado final, vitória ou empate.
+# Verifica se o jogo chegou a um estado final: vitória ou empate.
 def fim_de_jogo(tabuleiro):
     return verificar_vitoria_gui(tabuleiro, True) or verificar_empate(tabuleiro)
 
@@ -146,10 +146,10 @@ def acao_botoes(acao, dificuldade, modo_de_jogo):
 
 # Função princípal que desenha o tabuleiro, botões, captura os eventos e executa as jogadas
 def mainGUI(tabuleiro, dificuldade, jogador_atual='X', modo_de_jogo='P x IA'):
-    # Preenche o fundo com branco
+    # Preenche o fundo com azul
     janela.fill(COR_BG)
 
-    # Desenha o tabuleiro e botões na tela
+    # Desenha o tabuleiro
     desenhar_tabuleiro(tabuleiro)
 
     # Desenha os botões na tela
@@ -168,7 +168,6 @@ def mainGUI(tabuleiro, dificuldade, jogador_atual='X', modo_de_jogo='P x IA'):
     rodando = True
     jogando = True
     while rodando:
-        # print('rodando')
         for evento in pygame.event.get():
             if evento.type == QUIT:
                 rodando = False
@@ -219,4 +218,5 @@ def mainGUI(tabuleiro, dificuldade, jogador_atual='X', modo_de_jogo='P x IA'):
 dificuldades = {1: 'Fácil', 2: 'Média', 3: 'Difícil'}
 dificuldade = 3
 
+# Inicia o jogo
 mainGUI(novo_tabuleiro(), dificuldade, 'X')

@@ -34,5 +34,6 @@ def ler_dificuldade(dificuldade_anterior):
     return int(index_dificuldade)
 
 
+# Troca a figura do jogador atual
 def trocar_jogador(ultimo_jogador):
     return "O" if ultimo_jogador == "X" else "X"

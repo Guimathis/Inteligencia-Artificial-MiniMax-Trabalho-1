@@ -125,7 +125,7 @@ def melhor_jogadaIA(tabuleiro, dificuldade):
     valor = 0
     maior_valor = -999
     jogadas = jogadas_possiveis(tabuleiro)
-    print('Jogadas possiveis para IA: \n', jogadas)
+    print('\nJogadas possiveis para IA: \n', jogadas)
     for jogada in jogadas:
         tabuleiro[jogada[0]][jogada[1]] = 'O'  # simula a jogada
 
@@ -159,7 +159,7 @@ def melhor_jogadaIA(tabuleiro, dificuldade):
 
         print('Valor da jogada ' + jogada.__str__() + ': ' + valor.__str__())
 
-    print(f'IA escolheu marcar O na posição {melhor_jogada} com um valor de: {maior_valor}\n\n')
+    print(f'IA escolheu marcar O na posição {melhor_jogada} com um valor de: {maior_valor}\n')
     return melhor_jogada  # (i, j)
 
 

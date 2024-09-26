@@ -1,7 +1,3 @@
-# método all(), retorna true apenas se
-#   todas as comparações da iteração forem verdadeiras
-from Interface.GUI.constantes import *
-
 
 # Verifica se há um vencedor.
 # Se existir retorna a figura do vencedor

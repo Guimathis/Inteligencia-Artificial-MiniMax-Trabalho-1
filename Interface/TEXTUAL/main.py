@@ -1,5 +1,5 @@
 from IA.IA import *
-from jogo.jogador import ler_entrada, ler_jogada, ler_dificuldade
+from jogo.jogador import ler_entrada, ler_jogada, ler_dificuldade, trocar_jogador
 from jogo.tabuleiro import imprimir_tabuleiro, novo_tabuleiro
 
 
@@ -55,7 +55,7 @@ def jogador_vs_jogador(tabuleiro, jogador_atual):
                 print("Posição já ocupada! Tente novamente.")
                 continue
             tabuleiro[jogada['linha']][jogada['coluna']] = jogador_atual
-            jogador_atual = "O" if jogador_atual == "X" else "X"  # Altera o jogador para a proxima iteração
+            jogador_atual = trocar_jogador(jogador_atual)  # Altera o jogador para a proxima iteração
         except (ValueError, IndexError, TypeError):  # Tratamento de exceções para evitar encerramentos inesperados
             print("Entrada inválida, insira uma posição valida:")
             continue
@@ -90,7 +90,7 @@ def jogador_vs_IA(tabuleiro, jogador_atual, dificuldades, dificuldade):
         except (ValueError, IndexError, TypeError):  # Tratamento de exceções para evitar encerramentos inesperados
             print("Entrada inválida, insira uma posição valida:")
             continue
-        jogador_atual = "O" if jogador_atual == "X" else "X"  # Altera o jogador para a proxima iteração
+        jogador_atual = trocar_jogador(jogador_atual)  # Altera o jogador para a proxima iteração
 
 
 if __name__ == '__main__':
