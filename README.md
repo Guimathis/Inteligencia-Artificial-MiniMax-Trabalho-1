@@ -40,4 +40,6 @@ Este repositório contém uma implementação do clássico jogo da velha (tic-ta
    ```bash
    git clone https://github.com/Guimathis/Inteligencia-Artificial-MiniMax-Trabalho-1.git
    
-- Execute a partir do arquivo main.py
+- Execute a partir do arquivo main.py para interface textual
+- Execute a partir do arquivo GUIpygame.py para interface gráfica
+- Recomendado utilizar a IDE Pycharm.
